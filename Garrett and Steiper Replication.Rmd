@@ -1,0 +1,8 @@
+---
+title: "Garrett and Steiper 2014 Replication"
+author: "Becca DeCamp"
+date: "3/2/2018"
+output: html_document
+---
+hello and welcome
+
