@@ -128,4 +128,13 @@ Now, at long last, we are ready for PGLS!!!
 
 ##PGLS Analysis
 
-g
+There are a few things we need to do to get ready for PGLS. The first step is loading in the tree data (in this case, the Bininda-Emonds (2007) Mammalian Supertree, which I have pushed to GitHub as well.)
+
+```{r}
+library(caper)
+library(ape)
+
+MammalTree <- read.nexus("Bininda-Emonds Supertree 2007.txt")
+```
+
+I wanted to plot the tree for you just to show you what it looked like, but it was so big that all the text was just a mass of black, and it caused me to force-quit R several times. Lol. But we have the tree loaded in to our workspace, which is all that matters. 
