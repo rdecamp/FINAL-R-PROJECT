@@ -4,5 +4,7 @@ author: "Becca DeCamp"
 date: "3/2/2018"
 output: html_document
 ---
-hello and welcome
+At last! At long last! Here is my final R project!! After everthing kind of fell apart with my intended project, I am very happy to be replicating a 2014 paper by Eva Garrett and Michael Steiper titled <i>Strong links between genomic and anatomical diversity in both mammalian olfactory chemosensory systems </i>. This paper tested the relationships between the sizes of several skeletal structures and organs linked to the main olfactory and vomeronasal systems (MOS and VNS, respectively), as well as the number of both functional and total olfactory receptor (OR) or vomeronasal (V1R) genes (depending on the system). Additionally, all regressions were controlled for phylogenetic relatedness by using the phylogenetic least squares (PGLS) function from the caper package. The paper concluded that the variation in MOS anatomical phenotypes is correlated more with total number of olfactory genes and gene family size, while variation in the VNS anatomical phenotypes is correlated more with the number of functional genes. I am going to attemp to replicate these results. 
+
+##Preliminaries
 
