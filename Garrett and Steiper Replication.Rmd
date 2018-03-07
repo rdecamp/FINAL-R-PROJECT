@@ -10,7 +10,7 @@ At last! At long last! Here is my final R project!! After everthing kind of fell
 
 ##Preliminaries
 
-Before I could begin this project in my R space, I had to take a few initial steps that I feel I should mention. First of all, Eva gave me the data in a PDF format, so I had to painstakingly convert the it to an Excel spreadsheet, reformat the entire dataset, check my work against the original to make sure all the values were correct, and convert that again to a CSV file that I can upload here. Additionally, in this process I deleted a few columns of data that I deemed unnecessary for my final dataset, which consisted of columns denoting specimen numbers for the anatomical samples and reference numbers for data citing. Below are pictures of the unedited dataset in PDF format.
+Before I could begin this project in my R space, I had to take a few initial steps that I feel I should mention. First of all, Eva gave me the data in a PDF format, so I had to painstakingly convert the it to an Excel spreadsheet, reformat the entire dataset, check my work against the original to make sure all the values were correct, and convert that again to a CSV file that I can upload here. Additionally, in this process I deleted a few columns of data that I deemed unnecessary for my final dataset, which consisted of columns denoting specimen numbers for the anatomical samples and reference numbers for data citing. Finally, I took a liberty by adding a column called Example Species, because the file type I made to perform PGLS needed specific species names to lock in to on the tree instead of just the genus names that the data provides.  Below are pictures of the unedited dataset in PDF format.
 
 ![](data1.png)
 ![](data2.png)
@@ -18,7 +18,7 @@ Before I could begin this project in my R space, I had to take a few initial ste
 ##First Steps
 
 Now, we are ready to read in my data and start the real work. For now we will start by loading in just the CSV file, because we need to add some additional columns to the dataset before we can do our PGLS. I have included this dataset in my GitHub repo for this project, so you can use a curl command to load it. 
-<br> Just a disclaimer, an artifact of having to transform this data from a PDF format is that there's some steps we will have to take to clean up the data more one we load it. 
+<br> Just a disclaimer, an artifact of having to transform this data from a PDF format is that there"s some steps we will have to take to clean up the data more one we load it. 
 
 ```{r}
 Olfaction <- read.csv(file="ESM_ALL GOOD ONE.csv", header=TRUE, sep=",")
@@ -27,7 +27,7 @@ head(Olfaction)
 
 Now, we need to transform some of our morphological data. Garrett and Steiper transformed their data in a few ways. The first that I will do is to calculate and make a new column for the size-adjusted VNO and ethmoid area. 
 <br>From the paper: "Size adjusted VNO data was calculated by dividing VNO length by head-body length"
-<br> This is going to be a little bumpy, because converting data classes without fucking up your data is more complicated than it should be. Thanks to stack overflow for teaching me the unfactor() function from the varhandle package.
+<br> This is going to be a little bumpy, because converting data classes without fucking up your data is more complicated than it should be. Thanks to stack overflow for teaching me the unfactor() function from the varhandle package (citation).
 ```{r}
 library(varhandle)
 #First, we need to change the class of the data
@@ -114,7 +114,7 @@ Olfaction$Total.V1R.Genes <- as.numeric(Olfaction$Total.V1R.Genes)
 
 Olfaction$prop.intact.V1R.genes <- Olfaction$Intact.V1R.Genes / Olfaction$Total.V1R.Genes
 
-#Now, let's look at our two new colums!
+#Now, let"s look at our two new colums!
 head(Olfaction)
 ```
 
@@ -135,6 +135,42 @@ library(caper)
 library(ape)
 
 MammalTree <- read.nexus("Bininda-Emonds Supertree 2007.txt")
+
+class(MammalTree)
 ```
 
 I wanted to plot the tree for you just to show you what it looked like, but it was so big that all the text was just a mass of black, and it caused me to force-quit R several times. Lol. But we have the tree loaded in to our workspace, which is all that matters. 
+<br> So one thing I discovered as I tried to coerce my data in to a comparative.data file is the difference between multiphylo and phylo objects. Since the Mammalian Supertree is a Multiphylo object (meaning it"s made up of many trees), I need to prune it in order to do the PGLS. Garrett and Steiper also pruned their tree (mentioned under their "quanitiative menthods" section), but did not tell how they pruned it. Therefore, I'm assuming that they pruned the tree to include only genuses from the dataset. I taught myself how to prune a tree using a helpful blog post (citation), so let's hope this works. I manually found all of the species within each genus in the plain text file of the tree to put in our matrix, so you're welcome. 
+
+```{r}
+
+#The first thing I need to do is make a list of all of the species I want in this tree. This is a very long list that didn't run all at once so bear with me. 
+
+cols <- c("Bos_grunniens", "Bos_sauveli", "Bos_taurus", "Bos_frontalis", "Bos_javanicus", "Canis_lupus", "Canis_rufus", "Canis_latrans", "Canis_simensis", "Canis_adustus", "Canis_aureus", "Canis_mesomelas", "Callithrix_argentata", "Callithrix_humeralifera", "Callithrix_pygmaea", "Callithrix_aurita", "Callithrix_flaviceps", "Callithrix_geoffroyi", "Callithrix_kuhlii", "Callithrix_jacchus", "Callithrix_penicillata", "Cavia_porcellus", "Cavia_tschudii", "Cavia_aperea", "Cavia_fulgida", "Cavia_magna", "Dasypus_hybridus", "Dasypus_kappleri", "Dasypus_novemcinctus", "Dasypus_pilosus", "Dasypus_sabanicola", "Dasypus_septemcinctus", "Echinops_telfairi", "Equus_asinus", "Equus_burchellii", "Equus_grevyi", "Equus_zebra", "Equus_hemionus", "Equus_kiang", "Equus_onager", "Equus_caballus", "Erinaceus_concolor", "Erinaceus_amurensis", "Erinaceus_europaeus", "Felis_margarita", "Felis_nigripes", "Felis_silvestris")
+
+
+cols2 <- c("Felis_bieti", "Felis_chaus", "Gorilla_gorilla", "Homo_sapiens", "Loxodonta_africana", "Macaca_arctoides", "Macaca_assamensis", "Macaca_thibetana", "Macaca_radiata", "Macaca_sinica", "Macaca_cyclopis", "Macaca_mulatta", "Macaca_fuscata", "Macaca_fascicularis", "Macaca_maura", "Macaca_nigra", "Macaca_ochreata", "Macaca_tonkeana", "Macaca_nemestrina", "Macaca_silenus", "Macaca_sylvanus", "Macropus_agilis", "Macropus_eugenii", "Macropus_dorsalis", "Macropus_parma", "Macropus_irma", "Macropus_parryi", "Macropus_rufogriseus", "Macropus_antilopinus", "Macropus_rufus", "Macropus_robustus", "Macropus_bernardus", "Macropus_fuliginosus", "Macropus_giganteus", "Microcebus_coquereli", "Microcebus_murinus", "Microcebus_rufus", "Monodelphis_adusta", "Monodelphis_americana", "Monodelphis_brevicaudata", "Monodelphis_dimidiata", "Monodelphis_domestica", "Monodelphis_emiliae", "Monodelphis_iheringi", "Monodelphis_kunsi", "Monodelphis_maraxina", "Monodelphis_osgoodi", "Monodelphis_rubida", "Monodelphis_scalops", "Monodelphis_sorex", "Monodelphis_theresa", "Monodelphis_unistriata", "Mus_crociduroides", "Mus_famulus", "Mus_mayori", "Mus_pahari", "Mus_vulcani", "Mus_booduga", "Mus_caroli", "Mus_cervicolor", "Mus_cookii", "Mus_macedonicus", "Mus_musculus", "Mus_spicilegus", "Mus_spretus", "Mus_terricolor", "Mus_baoulei", "Mus_bufo", "Mus_callewaerti", "Mus_goundae", "Mus_haussa", "Mus_indutus", "Mus_kasaicus", "Mus_mahomet", "Mus_mattheyi", "Mus_minutoides", "Mus_musculoides", "Mus_neavei", "Mus_orangiae", "Mus_oubanguii", "Mus_setulosus", "Mus_setzeri", "Mus_sorella", "Mus_tenellus", "Mus_triton", "Mus_fernandoni", "Mus_phillipsi", "Mus_platythrix", "Mus_saxicola", "Mus_shortridgei", "Myotis_abei", "Myotis_aelleni", "Myotis_albescens", "Myotis_austroriparius", "Myotis_chiloensis", "Myotis_cobanensi", "Myotis_dasycneme", "Myotis_fortidens", "Myotis_grisescens", "Myotis_levis", "Myotis_lucifugus", "Myotis_montivagus", "Myotis_oxyotus", "Myotis_peninsularis", "Myotis_ricketti", "Myotis_velifer", "Myotis_volans", "Myotis_yumanensis", "Myotis_lesueuri", "Myotis_seabrai", "Myotis_macrotarsus", "Myotis_stalkeri", "Myotis_vivesi", "Myotis_riparius", "Myotis_simus", "Myotis_ruber", "Myotis_adversus", "Myotis_bocagei", "Myotis_hasseltii", "Myotis_horsfieldii", "Myotis_capaccinii", "Myotis_daubentoni", "Myotis_longipes", "Myotis_macrodactylus", "Myotis_pruinosus", "Myotis_formosus", "Myotis_morrisi", "Myotis_tricolor", "Myotis_blythii", "Myotis_chinensis", "Myotis_myotis", "Myotis_sicarius", "Myotis_bechsteini", "Myotis_auriculus", "Myotis_evotis", "Myotis_keenii", "Myotis_milleri", "Myotis_pequinius", "Myotis_bombinus", "Myotis_nattereri", "Myotis_schaubi", "Myotis_thysanodes", "Myotis_siligorensis", "Myotis_scotti", "Myotis_oreias", "Myotis_altarium", "Myotis_californicus", "Myotis_leibii", "Myotis_planiceps", "Myotis_brandti", "Myotis_insularum", "Myotis_mystacinus", "Myotis_frater", "Myotis_annectans", "Myotis_australis", "Myotis_hosonoi", "Myotis_ikonnikovi", "Myotis_muricola", "Myotis_ozensis", "Myotis_ridleyi", "Myotis_rosseti", "Myotis_yesoensis", "Myotis_atacamensis", "Myotis_dominicensis", "Myotis_elegans", "Myotis_findleyi", "Myotis_keaysi", "Myotis_martiniquensis", "Myotis_nesopolus", "Myotis_nigricans", "Myotis_sodalis", "Ornithorhynchus_anatinus", "Oryctolagus_cuniculus", "Otolemur_crassicaudatus", "Otolemur_garnettii", "Pan_paniscus", "Pan_troglodytes", "Papio_hamadryas", "Pongo_pygmaeus", "Procavia_capensis", "Pteropus_sanctacrucis", "Pteropus_mearnsi", "Pteropus_speciosus", "Pteropus_neohibernicus", "Pteropus_howensis", "Pteropus_ornatus", "Pteropus_pumilus", "Pteropus_melanotus", "Pteropus_hypomelanus", "Pteropus_griseus", "Pteropus_admiralitatum", "Pteropus_alecto", "Pteropus_faunulus", "Pteropus_dasymallus", "Pteropus_livingstonii", "Pteropus_melanopogon")
+
+cols1 <- c("Pteropus_caniceps", "Pteropus_argentatus", "Pteropus_conspicillatus", "Pteropus_ocularis", "Pteropus_anetianus", "Pteropus_samoensis", "Pteropus_mariannus", "Pteropus_tonganus", "Pteropus_personatus", "Pteropus_temmincki", "Pteropus_macrotis", "Pteropus_pohlei", "Pteropus_poliocephalus", "Pteropus_lombocensis", "Pteropus_molossinus", "Pteropus_rodricensis", "Pteropus_chrysoproctus", "Pteropus_fundatus", "Pteropus_rayneri", "Pteropus_giganteus", "Pteropus_lylei", "Pteropus_vampyrus", "Pteropus_gilliardi", "Pteropus_mahaganus", "Pteropus_scapulatus", "Pteropus_woodfordi", "Pteropus_aldabrensis", "Pteropus_seychellensis", "Pteropus_niger", "Pteropus_rufus", "Pteropus_voeltzkowi", "Pteropus_insularis", "Pteropus_leucopterus", "Pteropus_nitendiensis", "Pteropus_phaeocephalus", "Pteropus_pselaphon", "Pteropus_tuberculatus", "Pteropus_vetulus", "Rattus_colletti", "Rattus_fuscipes", "Rattus_hainaldi", "Rattus_lutreolus", "Rattus_sordidus", "Rattus_timorensis", "Rattus_tunneyi", "Rattus_villosissimus", "Rattus_elaphinus", "Rattus_feliceus", "Rattus_giluwensis", "Rattus_jobiensis", "Rattus_leucopus", "Rattus_mordax", "Rattus_morotaiensis", "Rattus_novaeguineae", "Rattus_praetor", "Rattus_sanila", "Rattus_steini", "Rattus_annandalei", "Rattus_enganus", "Rattus_exulans", "Rattus_hoogerwerfi", "Rattus_korinchi", "Rattus_montanus", "Rattus_ranjiniae", "Rattus_stoicus", "Rattus_adustus", "Rattus_argentiventer", "Rattus_baluensis", "Rattus_burrus", "Rattus_everetti", "Rattus_hoffmanni", "Rattus_koopmani", "Rattus_losea", "Rattus_lugens", "Rattus_mindorensis", "Rattus_mollicomulus", "Rattus_nitidus", "Rattus_osgoodi", "Rattus_palmarum", "Rattus_rattus", "Rattus_sikkimensis", "Rattus_simalurensis", "Rattus_tanezumi", "Rattus_tawitawiensis", "Rattus_tiomanicus", "Rattus_turkestanicus", "Rattus_norvegicus", "Rattus_bontanus", "Rattus_foramineus", "Rattus_marmosurus", "Rattus_pelurus", "Rattus_xanthurus", "Sorex_alpinus", "Sorex_raddei", "Sorex_mirabilis", "Sorex_excelsus", "Sorex_samniticus", "Sorex_arcticus", "Sorex_coronatu", "Sorex_araneus", "Sorex_granarius", "Sorex_satunini", "Sorex_daphaenodon", "Sorex_tundrensis", "Sorex_asper", "Sorex_isodon", "Sorex_unguiculatus", "Sorex_roboratus", "Sorex_caecutiens", "Sorex_shinto", "Sorex_sadonis", "Sorex_minutissimus", "Sorex_hosonoi", "Sorex_gracillimus", "Sorex_minutus", "Sorex_volnuchini", "Sorex_buchariensis", "Sorex_cinereus", "Sorex_hoyi", "Sorex_fumeus", "Sorex_preblei", "Sorex_longirostris", "Sorex_ornatus", "Sorex_nanus", "Sorex_leucogaster", "Sorex_ugyunak", "Sorex_haydeni", "Sorex_dispar", "Sorex_tenellus", "Sorex_bairdii", "Sorex_portenkoi", "Sorex_jacksoni", "Sorex_palustris", "Sorex_bendirii", "Sorex_monticolus", "Sorex_vagrans", "Sorex_pacificus", "Sorex_trowbridgii", "Sorex_arizonae", "Sorex_merriami", "Tarsius_bancanus", "Tarsius_dianae", "Tarsius_pumilus", "Tarsius_spectrum", "Tarsius_syrichta", "Tupaia_belangeri", "Tupaia_chrysogaster", "Tupaia_dorsalis", "Tupaia_glis", "Tupaia_gracilis", "Tupaia_javanica", "Tupaia_longipes", "Tupaia_minor", "Tupaia_montana", "Tupaia_nicobarica", "Tupaia_palawanensis", "Tupaia_picta", "Tupaia_splendidula", "Tupaia_tana", "Tursiops_truncatus")
+
+species <- c(cols, cols1, cols2)
+
+#Next I need to create dummy vectors to store the data
+
+CI_upper<-tstat_list<-pval_list<-CI_lower<-ml_list<-matrix(0,length(MammalTree)) 
+
+#Then we make a loop to pick out all of the species and prune them using a function from caper. 
+
+for(i in 1:length(MammalTree)) {   pruned.trees<-drop.tip(MammalTree[[i]], setdiff(MammalTree[[i]]$tip.label, species)) } 
+
+plot(pruned.trees)
+
+#NOW, we should be able to make our comparative matrix with our new tree and our dataset. Here is where the Example Species column I made comes in. 
+
+MammalComparative <- comparative.data(phy = pruned.trees, data = Olfaction, names.col = Example.Species, vcv = TRUE, na.omit = FALSE, warn.dropped = TRUE) 
+
+```
+
+FINALLY I can start doing the PGLS. 
+
+##PGLS 

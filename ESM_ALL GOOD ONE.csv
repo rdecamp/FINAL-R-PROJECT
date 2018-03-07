@@ -1,33 +1,33 @@
-Genus,Common Name,VNO Cat.,VNO Length (mm),Head and Body Length (HBL) (mm),Ethmoid Area (mm2),Skull Area (mm2),Total OR Genes,Functional OR Genes,Total V1R Genes,Intact V1R Genes
-Bos,Cow,2,85,2000,1386,44791,2381,1583,83,40
-Canis,Dog,2,14.5,1200,578,14055,1044,883,63,9
-Callithrix,Marmoset,3,2.52,183,13.88,914.48,624,366,63,8
-Cavia,Guinea Pig,1,7,250,22.8,1252,1681,561,262,89
-Dasypus,Armadillo,2,18,450,334,2417,3146,1146,181,55
-Echinops,Tenrec,2,1.6,160,16.09,377.3,925,585,32,8
-Equus,Horse,2,85,2500,1408,70447,2311,1459,93,36
-Erinaceus,Hedgehog,2,No data,225,942,1444,625,295,114,64
-Felis,Cat,2,15,460,89.5,4047,850,508,89,28
-Gorilla,Gorilla,5,Absent,1600,135,25946,598,264,115,3
-Homo,Human,5,Absent,1734,132,17018,833,581,116,3
-Loxodonta,Elephant,2,135,7000,4840,306160,4364,1988,128,33
-Macaca,Macaque,6,Absent,553,27.2,7499,733,464,60,0
-Macropus,Tamar Wallaby,2,40,600,No data,No data,No data,No data,202,89
-Microcebus,Mouse Lemur,2,6.32,121,17.6,734,977,573,259,214
-Monodelphis,Opossum,2,8,131,126.29,376.89,1383,1273,130,95
-Mus,Mouse,1,3,80,7.95,188,1264,1190,392,239
-Myotis,Bat,6,Absent,80,8.2,263,659,381,24,0
-Nomascus,Gibbon,5,Absent,546,77.02,5683.97,No data,No data,110,2
-Ornithorhynchus,Platypus,2,7,400,No data,No data,746,433,1405,283
-Oryctolagus,Rabbit,2,No data,400,68,2879,977,604,283,159
-Otolemur,Galago,2,7.53,328,41.5,2031,802,432,133,78
-Pan,Chimp,5,Absent,839,49.03,14384.01,865,550,106,4
-Papio,Baboon,6,Absent,696,36.165,8596.24,No data,No data,94,3
-Pongo,Orangutan,5,Absent,875,75,30149,931,511,178,5
-Procavia,Hyrax,2,No data,600,100.47,2183.53,678,316,121,36
-Pteropus,Bat,6,Absent,260,43,1721,672,345,49,0
-Rattus,Rat,1,8,192,21.1,697,1713,1420,219,108
-Sorex,Shrew,2,No data,66,12.5,186,1778,1028,117,77
-Tarsius,Tarsier,3,1.01,111,27.46,1183.7,344,88,266,42
-Tupaia,Treeshrew,2,9.8,170,83.57,2197.15,2176,985,180,96
-Tursiops,Dolphin,6,Absent,2870,No data,No data,26,12,33,0
+Genus,Example Species,Common Name,VNO Cat.,VNO Length (mm),Head and Body Length (HBL) (mm),Ethmoid Area (mm2),Skull Area (mm2),Total OR Genes,Functional OR Genes,Total V1R Genes,Intact V1R Genes
+Bos,Bos_taurus,Cow,2,85,2000,1386,44791,2381,1583,83,40
+Canis,Canis_lupus,Dog,2,14.5,1200,578,14055,1044,883,63,9
+Callithrix,Callithrix_pygmaea,Marmoset,3,2.52,183,13.88,914.48,624,366,63,8
+Cavia,Cavia_porcellus,Guinea Pig,1,7,250,22.8,1252,1681,561,262,89
+Dasypus,Dasypus_septemcinctus,Armadillo,2,18,450,334,2417,3146,1146,181,55
+Echinops,Echinops_telfairi,Tenrec,2,1.6,160,16.09,377.3,925,585,32,8
+Equus,Equus_caballus,Horse,2,85,2500,1408,70447,2311,1459,93,36
+Erinaceus,Erinaceus_amurensis,Hedgehog,2,No data,225,942,1444,625,295,114,64
+Felis,Felis_silvestris,Cat,2,15,460,89.5,4047,850,508,89,28
+Gorilla,Gorilla_gorilla,Gorilla,5,Absent,1600,135,25946,598,264,115,3
+Homo,Homo_sapiens,Human,5,Absent,1734,132,17018,833,581,116,3
+Loxodonta,Loxodonta_africana,Elephant,2,135,7000,4840,306160,4364,1988,128,33
+Macaca,Macaca_mulatta,Macaque,6,Absent,553,27.2,7499,733,464,60,0
+Macropus,Macropus_eugeni,Tamar Wallaby,2,40,600,No data,No data,No data,No data,202,89
+Microcebus,Microcebus_rufus,Mouse Lemur,2,6.32,121,17.6,734,977,573,259,214
+Monodelphis,Monodelphis_domestica,Opossum,2,8,131,126.29,376.89,1383,1273,130,95
+Mus,Mus_terricolor,Mouse,1,3,80,7.95,188,1264,1190,392,239
+Myotis,Myotis_myotis,Bat,6,Absent,80,8.2,263,659,381,24,0
+Nomascus,Nomascus_concolor,Gibbon,5,Absent,546,77.02,5683.97,No data,No data,110,2
+Ornithorhynchus,Ornithorhynchus_anatinus,Platypus,2,7,400,No data,No data,746,433,1405,283
+Oryctolagus,Oryctolagus_cuniculus,Rabbit,2,No data,400,68,2879,977,604,283,159
+Otolemur,Otolemur_garnettii,Galago,2,7.53,328,41.5,2031,802,432,133,78
+Pan,Pan_troglodytes,Chimp,5,Absent,839,49.03,14384.01,865,550,106,4
+Papio,Papio_hamadryas,Baboon,6,Absent,696,36.165,8596.24,No data,No data,94,3
+Pongo,Pongo_pygmaeus,Orangutan,5,Absent,875,75,30149,931,511,178,5
+Procavia,Procavia_capensis,Hyrax,2,No data,600,100.47,2183.53,678,316,121,36
+Pteropus,Pteropus_vampyrus,Bat,6,Absent,260,43,1721,672,345,49,0
+Rattus,Rattus_rattus,Rat,1,8,192,21.1,697,1713,1420,219,108
+Sorex,Sorex_vagrans,Shrew,2,No data,66,12.5,186,1778,1028,117,77
+Tarsius,Tarsius_spectrum,Tarsier,3,1.01,111,27.46,1183.7,344,88,266,42
+Tupaia,Tupaia_minor,Treeshrew,2,9.8,170,83.57,2197.15,2176,985,180,96
+Tursiops,Tursiops_truncatus,Dolphin,6,Absent,2870,No data,No data,26,12,33,0
