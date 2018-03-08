@@ -163,7 +163,9 @@ CI_upper<-tstat_list<-pval_list<-CI_lower<-ml_list<-matrix(0,length(MammalTree))
 
 for(i in 1:length(MammalTree)) {   pruned.trees<-drop.tip(MammalTree[[i]], setdiff(MammalTree[[i]]$tip.label, species)) } 
 
-plot(pruned.trees)
+#Here's the tree! The tips are small as hell because that's the only way you'd be able to distinguish them all but everything's here!
+
+plot(pruned.trees, cex = 0.1)
 
 #NOW, we should be able to make our comparative matrix with our new tree and our dataset. Here is where the Example Species column I made comes in. 
 
@@ -174,3 +176,11 @@ MammalComparative <- comparative.data(phy = pruned.trees, data = Olfaction, name
 FINALLY I can start doing the PGLS. 
 
 ##PGLS 
+
+There is a very big long list of PGLS comparisons that Garrett and Steiper did, and I don't really feel up for doing it (Seriously, the list is two pages long!). Therefore, I'm only going to do the PGLS tests that showed significance both before and after the Bonferroni correction. I have pasted the table of all the tests they did below, highlighting the ones that I will do. 
+
+![](PGLS1.png)
+![](PGLS2.png)
+
+
+
