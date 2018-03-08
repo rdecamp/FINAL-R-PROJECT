@@ -177,10 +177,89 @@ FINALLY I can start doing the PGLS.
 
 ##PGLS 
 
-There is a very big long list of PGLS comparisons that Garrett and Steiper did, and I don't really feel up for doing it (Seriously, the list is two pages long!). Therefore, I'm only going to do the PGLS tests that showed significance both before and after the Bonferroni correction. I have pasted the table of all the tests they did below, highlighting the ones that I will do. 
+There is a very big long list of PGLS comparisons that Garrett and Steiper did, and I don't think it's worth my time to do all of them (Seriously, the list is two pages long!). Therefore, I'm only going to do the PGLS tests that showed significance both before and after the post-hoc testing. I have pasted the table of all the tests they did below, highlighting the ones that I will do. 
 
 ![](PGLS1.png)
 ![](PGLS2.png)
+
+I'm just going to go down the list and run these without post-hoc tests for right now and we'll see how it pans out!
+
+```{r}
+pgls1 <- pgls(Functional.OR.Genes ~ prop.functional.OR.Genes, MammalComparative)
+summary(pgls1)
+
+pgls2 <- pgls(Intact.V1R.Genes ~ prop.intact.V1R.genes, MammalComparative)
+summary(pgls2)
+
+pgls3 <- pgls(Intact.V1R.Genes ~ VNO.Size.Adj, MammalComparative)
+summary(pgls3)
+
+pgls4 <- pgls(Intact.V1R.Genes ~ Total.V1R.Genes, MammalComparative)
+summary(pgls4)
+
+pgls5 <- pgls(log.Ethmoid.Area ~ Functional.OR.Genes, MammalComparative)
+summary(pgls5)
+
+pgls6 <- pgls(log.Ethmoid.Area ~ Total.OR.Genes, MammalComparative)
+summary(pgls6)
+
+pgls7 <- pgls(log.VNO ~ Functional.OR.Genes, MammalComparative)
+summary(pgls7)
+
+pgls8 <- pgls(log.VNO ~ log.Ethmoid.Area, MammalComparative)
+summary(pgls8)
+
+pgls9 <- pgls(log.VNO ~ Total.OR.Genes, MammalComparative)
+summary(pgls9)
+
+pgls10 <- pgls(log.VNO ~ prop.intact.V1R.genes, MammalComparative)
+summary(pgls10)
+
+pgls11 <- pgls(log.VNO ~ VNO.Size.Adj, MammalComparative)
+summary(pgls11)
+
+pgls12 <- pgls(prop.intact.V1R.genes ~ Functional.OR.Genes, MammalComparative)
+summary(pgls12)
+
+pgls13 <- pgls(prop.intact.V1R.genes ~ log.Size.Adj.Ethmoid, MammalComparative)
+summary(pgls13)
+
+pgls14 <- pgls(VNO.Size.Adj ~ Functional.OR.Genes, MammalComparative)
+summary(pgls14)
+
+pgls15 <- pgls(VNO.Size.Adj ~ prop.intact.V1R.genes, MammalComparative)
+summary(pgls15)
+
+pgls16 <- pgls(VNO.Size.Adj ~ Total.OR.Genes, MammalComparative)
+summary(pgls16)
+
+pgls17 <- pgls(Total.OR.Genes ~ Functional.OR.Genes, MammalComparative)
+summary(pgls17)
+
+pgls18 <- pgls(VNO.Cat. ~ Functional.OR.Genes, MammalComparative)
+summary(pgls18)
+
+pgls19 <- pgls(VNO.Cat. ~ Intact.V1R.Genes, MammalComparative)
+summary(pgls19)
+
+pgls20 <- pgls(VNO.Cat. ~ log.VNO, MammalComparative)
+summary(pgls20)
+
+pgls21 <- pgls(VNO.Cat. ~ prop.intact.V1R.genes, MammalComparative)
+summary(pgls21)
+
+pgls22 <- pgls(VNO.Cat. ~ VNO.Size.Adj, MammalComparative)
+summary(pgls22)
+
+pgls23 <- pgls(VNO.Cat. ~ Total.OR.Genes, MammalComparative)
+summary(pgls23)
+
+```
+
+As you can see, most of them are significant, which is good I think? It means I didn't do something too terribly wrong at least. However, the one thing I'm wondering if they all are supposed to be significant right off the bat without any post hoc corrections. If I am understanding the caption at the bottom of "ESM Table 2" correctly, wouldn't the comparisons marked as being significant after post-hoc testing ONLY be significant after post-hoc testing? I know I'm not supposed to 100% get the same results as the paper, but I'm just curious if this is supposed to be true. Maybe it has something to do with the small liberties I took throughout this process? 
+<br> In any case, I'm going to move on to the post-hoc testing, and will do a more in-depth comparison of my results after that.  
+
+##Post-Hoc Testing
 
 
 
