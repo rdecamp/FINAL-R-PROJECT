@@ -260,10 +260,93 @@ summary(pgls23)
 
 ```
 
-As you can see, most of them are significant, which is good I think? It means I didn't do something too terribly wrong at least. However, the one thing I'm wondering if they all are supposed to be significant right off the bat without any post hoc corrections. If I am understanding the caption at the bottom of "ESM Table 2" correctly, wouldn't the comparisons marked as being significant after post-hoc testing ONLY be significant after post-hoc testing? I know I'm not supposed to 100% get the same results as the paper, but I'm just curious if this is supposed to be true. Maybe it has something to do with the small liberties I took throughout this process? 
+As you can see, A good number of them are significant, which is good I think? It means I didn't do something too terribly wrong at least. However, the one thing I'm wondering if they all are supposed to be significant right off the bat without any post hoc corrections. If I am understanding the caption at the bottom of "ESM Table 2" correctly, wouldn't the comparisons marked as being significant after post-hoc testing ONLY be significant after post-hoc testing? I know I'm not supposed to 100% get the same results as the paper, but I'm just curious if this is supposed to be true. I guess we'll revisit this after we do our post-hoc testing. 
 <br> In any case, I'm going to move on to the post-hoc testing, and will do a more in-depth comparison of my results after that.  
 
 ##Post-Hoc Testing
+
+Here's where I will have a go at the post-hoc testing, and see how that impacts my results. I think the easiest (?) way to go about this would be to use the p.adjust function, so I can just input all my P-values at once rather than doing something like PhylANOVA where I would have to basically do the PGLS over again. Also I'm not sure phylANOVA offers the Benjamini-Yekutieli (BY) correction. 
+<br> The first step to this is to pull out all the P-values from my PGLS and put them in to a vector. This is a litte painstaking, but that's all right. I will divide the P-value vectors in to three groups: The first, whose P-values were insignificant after testing; the second, whose P-values were significant after Bonferroni correction; and the third, whose P-values were significant after BY correction. I will correct all three groups with both the Bonferroni and BY corrections. 
+<br>Just to be clear which PGLS result numbers are going in which category, I will list them here: 
+
+* Tests with initial significance: pgls1, pgls3, pgls12, pgls13, pgls16, pgls18, pgls19, pgls23.
+
+*Tests with significance after Bonferroni: pgls2, pgls4, pgls6, pgls7, pgls8, pgls9, pgls11, pgls14, pgls15, pgls17, pgls20, pgls21, pgls22. 
+
+*Tests with significance after BY: pgls5, pgls10. 
+
+```{r}
+#First, make the vectors of pvals. I copied and pasted all the P-vals from the PGLS results.  
+
+initialsig <- c(0.005947, 0.08539, 0.0477, 0.0987, 0.004008, 0.008382, 0.02243, 0.0192)
+
+bonferronisig <- c(0.000278, 9.195e-06, 0.0006155, 1.973e-06, 0.0002867, 9.629e-07, 7.538e-06, 0.001568, 0.0008613, 7.908e-12, 0.00145, 1.813e-05, 0.001549)
+
+bysig <- c(0.001209, 0.1327)
+
+#Now, we plug in these vectors to p.adjust. Notice I set the n as 23, because we did 23 tests in total and need to factor that in. 
+
+#Starting with initially significant: 
+
+initial1 <- p.adjust(initialsig, method = "bonferroni", n = 23)
+initial1
+
+initial2 <- p.adjust(initialsig, method = "BY", n = 23)
+initial2
+
+#Now Bernoulli significant:
+
+bonferroni1 <- p.adjust(bonferronisig, method = "bonferroni", n = 23)
+bonferroni1
+
+bonferroni2 <- p.adjust(bonferronisig, method = "BY", n = 23)
+bonferroni2
+
+#Finally, BY significant
+
+by1 <- p.adjust(bysig, method = "bonferroni", n = 23)
+by1
+
+by2 <- p.adjust(bysig, method = "BY", n = 23)
+by2
+```
+
+We can compare these values to this handy table of reported P-values from the paper: 
+
+![](p-vals.png)
+
+##Two nice little graphs 
+
+The last thing I want to do is replicate the cute little graphs that are in this paper: 
+
+![](Graphs.png)
+
+I believe I can do something like this with ggPlot (not sure about the little color key graphic on the side though), so let's see how close we can get. 
+
+<br>First I will try plot A. As you will notice, I will need to add a new column in order to scale the colors correctly, which I will do first. 
+
+```{r}
+library(ggplot2)
+
+#The basic plot
+
+Olfaction$logHBL <- log(Olfaction$Head.and.Body.Length..HBL...mm.)
+
+mid<-median(Olfaction$logHBL)
+mid
+
+g <- ggplot(data = Olfaction, aes(x= log.Ethmoid.Area, y= Total.OR.Genes, color = logHBL)) + geom_point() + xlim(2, 9)
+g
+
+#Now adding better colors cause the default ones are shitty: 
+
+g1 <- g + scale_color_gradient2(midpoint=mid, low="red", mid="green", high="blue", space ="Lab" )
+g1
+
+
+```
+
+
 
 Resources: 
 
