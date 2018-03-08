@@ -6,7 +6,11 @@ output: html_document
 ---
 ![](Title.png)
 
-At last! At long last! Here is my final R project!! After everthing kind of fell apart with my intended project, I am very happy to be replicating a 2014 paper by Eva Garrett and Michael Steiper titled <i>Strong links between genomic and anatomical diversity in both mammalian olfactory chemosensory systems</i>. This paper tested the relationships between the sizes of several skeletal structures and organs linked to the main olfactory and vomeronasal systems (MOS and VNS, respectively), as well as the number of both functional and total olfactory receptor (OR) or vomeronasal (V1R) genes (depending on the system). Additionally, all regressions were controlled for phylogenetic relatedness by using the phylogenetic least squares (PGLS) function from the caper package, which works by combining quantitative data with a phylogenetic tree (which I will provide on my GitHub repo). The paper concluded that the variation in MOS anatomical phenotypes is correlated more with total number of olfactory genes and gene family size, while variation in the VNS anatomical phenotypes is correlated more with the number of functional genes. I am going to attemp to replicate these results. 
+At last! At long last! Here is my final R project!! After everthing kind of fell apart with my intended project, I am very happy to be replicating a 2014 paper by Eva Garrett and Michael Steiper titled <i>Strong links between genomic and anatomical diversity in both mammalian olfactory chemosensory systems</i>. 
+
+<br>This paper tested the relationships between the sizes of several skeletal structures and organs linked to the main olfactory and vomeronasal systems (MOS and VNS, respectively), as well as the number of both functional and total olfactory receptor (OR) or vomeronasal (V1R) genes (depending on the system). Additionally, all regressions were controlled for phylogenetic relatedness by using the phylogenetic least squares (PGLS) function from the caper package, which works by combining quantitative data with a phylogenetic tree (which I will provide on my GitHub repo). The paper concluded that the variation in MOS anatomical phenotypes is correlated more with total number of olfactory genes and gene family size, while variation in the VNS anatomical phenotypes is correlated more with the number of functional genes. 
+
+<br>I am going to replicate a selection of the PGLS regression analyses in this paper, which I will explain later which ones I chose. I will also put the results through Post-Hoc testing, which will be specified later as well. Finally, to end on a nice note, I will attempt to replicate two graphs from the paper. 
 
 ##Preliminaries
 
@@ -260,6 +264,12 @@ As you can see, most of them are significant, which is good I think? It means I 
 <br> In any case, I'm going to move on to the post-hoc testing, and will do a more in-depth comparison of my results after that.  
 
 ##Post-Hoc Testing
+
+Resources: 
+
+https://www.researchgate.net/publication/296695571_R_code
+
+https://stackoverflow.com/questions/3418128/how-to-convert-a-factor-to-an-integer-numeric-without-a-loss-of-information
 
 
 
