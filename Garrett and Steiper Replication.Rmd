@@ -31,7 +31,7 @@ head(Olfaction)
 
 Now, we need to transform some of our morphological data. Garrett and Steiper transformed their data in a few ways. The first that I will do is to calculate and make a new column for the size-adjusted VNO and ethmoid area. 
 <br>From the paper: "Size adjusted VNO data was calculated by dividing VNO length by head-body length"
-<br> This is going to be a little bumpy, because converting data classes without fucking up your data is more complicated than it should be. Thanks to stack overflow for teaching me the unfactor() function from the varhandle package (citation).
+<br> This is going to be a little bumpy, because converting data classes without fucking up your data is more complicated than it should be. Thanks to stack overflow for teaching me the unfactor() function from the varhandle package [2].
 ```{r}
 library(varhandle)
 #First, we need to change the class of the data
@@ -144,7 +144,7 @@ class(MammalTree)
 ```
 
 I wanted to plot the tree for you just to show you what it looked like, but it was so big that all the text was just a mass of black, and it caused me to force-quit R several times. Lol. But we have the tree loaded in to our workspace, which is all that matters. 
-<br> So one thing I discovered as I tried to coerce my data in to a comparative.data file is the difference between multiphylo and phylo objects. Since the Mammalian Supertree is a Multiphylo object (meaning it"s made up of many trees), I need to prune it in order to do the PGLS. Garrett and Steiper also pruned their tree (mentioned under their "quanitiative menthods" section), but did not tell how they pruned it. Therefore, I'm assuming that they pruned the tree to include only genuses from the dataset. I taught myself how to prune a tree using a helpful blog post (citation), so let's hope this works. I manually found all of the species within each genus in the plain text file of the tree to put in our matrix, so you're welcome. 
+<br> So one thing I discovered as I tried to coerce my data in to a comparative.data file is the difference between multiphylo and phylo objects. Since the Mammalian Supertree is a Multiphylo object (meaning it"s made up of many trees), I need to prune it in order to do the PGLS. Garrett and Steiper also pruned their tree (mentioned under their "quanitiative menthods" section), but did not tell how they pruned it. Therefore, I'm assuming that they pruned the tree to include only genuses from the dataset. I taught myself how to prune a tree using a helpful blog post [1], so let's hope this works. I manually found all of the species within each genus in the plain text file of the tree to put in our matrix, so you're welcome. 
 
 ```{r}
 
@@ -311,7 +311,7 @@ by2 <- p.adjust(bysig, method = "BY", n = 23)
 by2
 ```
 
-We can compare these values to this handy table of reported P-values from the paper: 
+We can compare these values to this handy table of reported P-values from the paper: (I think it's meant to be read where the row name is the second variable ('x' variable) in the PGLS and the column name is the first variable ('y' variable) in the PGLS)
 
 ![](p-vals.png)
 We have to really go back and look to see which P-values of my analysis align with which P-values of the table. I will cover this more in-depth in my "Discussion" section, but for now I will say that there are some very obvious discrepancies between my calculations and the original calculations, but many of them were also very similar to the original, which I am happy about. 
@@ -323,9 +323,9 @@ The last thing I want to do is replicate the cute little graphs that are in this
 
 ![](Graphs.png)
 
-I believe I can do something akin to this with ggPlot (not sure about the little color key graphic on the side though), so let's see how close/pretty we can get. 
+I believe I can do something akin to this with ggPlot (not sure about the little color key graphic on the side though), so let's see how close/pretty we can get. I used this ggplot cheat-sheet as a reference [3]. 
 
-<br>First I will try plot A. As you will notice, I will need to add a new column in order to scale the colors correctly, which I will do first. 
+<br>First I will try to make plot A. As you will notice, I will need to add a new column in order to scale the colors correctly, which I will do first. 
 
 ```{r}
 library(ggplot2)
@@ -381,18 +381,53 @@ g7 <- g6 + geom_smooth(method='lm', se = FALSE, color = "black")
 g7
 ```
 
-This one doesn't match the original as well... Also, I'm not sure but I think that the original graph had an intercept that was anchored at 0. I will discuss what was similar and different about these graphs at the end of my "Discussion" section. 
-
+This one doesn't match the original as well... Also, I'm not sure but I think that the original graph had an intercept that was anchored at 0. I couldn't figure out how to do that, so oh well. 
+<br> The biggest problem I have with these graphs is the color gradient. I don't know whether my gradient span is too large for the data (especially on the lower end), or if the data is not as diverse in the lower end as Garrett and Steiper make it out to be in their graph. 
+One other thing that doesn't look as great as Garrett and Steiper is the size scaling in graph B. I realize now that it's because they are scaled in the opposite direction as Garrett and Steiper (the original graph had smaller data points for less complex VNO systems, while my graph has larger data points for less complex VNO systems. I think it's because of how they're categorized...). If you look at them while taking that in mind. I think it's much more close to the original. 
 ##Discussion
 
+Overall, I think my reanalysis wasn't a failure. I came to many of the similar conclusions that Garrett and Steiper's orginal paper did. But, there were a few differences in my results that I think are pretty significant. Before I discuss this further, I want to list all of the PGLS comparisons I did, along with their P-values to make this discussion easier to understand: 
+
+* Functional.OR.Genes ~ prop.functional.OR.Genes, p = 0.005947 (initial)
+* Intact.V1R.Genes ~ prop.intact.V1R.genes, p = 6.39400e-03 (Bonferroni correction)
+* Intact.V1R.Genes ~ VNO.Size.Adj, p = 0.08539 (initial)
+* Intact.V1R.Genes ~ Total.V1R.Genes, p = 2.11485e-04 (Bonferroni correction)
+* log.Ethmoid.Area ~ Functional.OR.Genes, p = 0.1038394 (BY correction)
+* log.Ethmoid.Area ~ Total.OR.Genes, p = 1.41565e-02 (Bonferroni correction)
+* log.VNO ~ Functional.OR.Genes, p = 4.53790e-05 (Bonferroni correction)
+* log.VNO ~ log.Ethmoid.Area, p = 6.59410e-03 (Bonferroni correction)
+* log.VNO ~ Total.OR.Genes p = 2.21467e-05 (Bonferroni correction)
+* log.VNO ~ prop.intact.V1R.genes, p = 1.0000000 (BY correction)
+* log.VNO ~ VNO.Size.Adj, p = 1.73374e-04 (Bonferroni correction)
+* prop.intact.V1R.genes ~ Functional.OR.Genes, p = 0.0477 (initial)
+* prop.intact.V1R.genes ~ log.Size.Adj.Ethmoid, p = 0.0987 (initial)
+* VNO.Size.Adj ~ Functional.OR.Genes, p = 3.60640e-02 (Bonferroni correction)
+* VNO.Size.Adj ~ prop.intact.V1R.genes, p = 1.98099e-02 (Bonferroni correction)
+* VNO.Size.Adj ~ Total.OR.Genes, p = 0.004008 (initial)
+* Total.OR.Genes ~ Functional.OR.Genes, p = 1.81884e-10 (Bonferroni correction)
+* VNO.Cat. ~ Functional.OR.Genes, p = 0.008382 (initial)
+* VNO.Cat. ~ Intact.V1R.Genes, p = 0.02243 (initial)
+* VNO.Cat. ~ log.VNO, p = 3.33500e-02 (Bonferroni correction)
+* VNO.Cat. ~ prop.intact.V1R.genes, p = 4.16990e-04 (Bonferroni correction)
+* VNO.Cat. ~ VNO.Size.Adj, p = 3.56270e-02 (Bonferroni correction)
+* VNO.Cat. ~ Total.OR.Genes, p =  0.0192 (initial)
+
+As you can see from this list, I was very successful in the PGLS tests that used the Bonferroni correction; All of those tests had the same or similar level of significance as the original tests performed by Garrett and Steiper. Moving on to the tests that were significant initially, it was a toss-up. Some of them were significant, like Garrett and Steiper, but some of them weren't. All of them were insignificant after post hoc testing. Finally, we get to the BY corrected tests. These were insignificant before and after post hoc testing, which is not at all what Garrett and Steiper found. 
+
+<br> Looking at these tests further, we should look at what these actually mean. Many of the Bonferroni-corrected tests showed significant correlation between the total number of both OR and V1R genes and the proportion of fuctional or intact genes. They also showed the link between the category of VNO and the size of the VNO. Some even showed correlation between the MOS and VNO systems, such as correlation between the number of OR genes and the VNO length. These are important, but not what the paper is trying to argue. 
+
+<br>The paper emphasized, in particular, the links between the size of the VNO/ethmoid bone and the number of intact/functional genes each species had for these organs. These results are where my replication falters. Both of these tests were BY-corrected and yielded insignificant results for me. I'm not sure what I did differently than Garrett and Steiper that affected these important results so drastically, but I have some ideas. 
+
+<br> The biggest source of error in these tests, I think, may have come from how I modified/adjusted the data. There may have been calculation errors when I was computing my extra columns of size-adjusted and logged data. I know that for the logged size adjusted ethmoid calculations, I used the log1p function even though Garrett and Steiper did not. I felt it was good to do that in order to make all the values positive, but it most likely impacted my results. Another possible source of error could come from how I dealt with the phylogenetic aspect of the project. I'm not sure exactly how Garrett and Steiper pruned their tree and aligned it to their dataset, so I took some liberties trying to google things and do what I felt was right instead of asking for guidance from Eva. To be fair, I am doing this over vacation and don't want to bother her... There's probably other things that influenced the results of this paper, but I can't think of any more at the moment so I'll leave it be. 
+
+<br> At the end of the day, I know that it's not incredibly important that I do everything in this project 100% right. I made a best attempt, which has its flaws, but I am incredibly proud of anyway. Learning how to analyze data is one of the hardest things you have to do as a scientist, and I know I still have so much more to learn and so much more practicing to do. But taking this class and doing this project has taught me a lot of lessons about scientific inquiry and furthered my understanding of statistical analysis greatly. Chris, I hope you are happy with the work that I've done, because I sure as hell am. 
 
 
+##Resources: 
 
-Resources: 
+[1] https://www.researchgate.net/publication/296695571_R_code
 
-https://www.researchgate.net/publication/296695571_R_code
+[2] https://stackoverflow.com/questions/3418128/how-to-convert-a-factor-to-an-integer-numeric-without-a-loss-of-information
 
-https://stackoverflow.com/questions/3418128/how-to-convert-a-factor-to-an-integer-numeric-without-a-loss-of-information
-
-
+[3] https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf
 
