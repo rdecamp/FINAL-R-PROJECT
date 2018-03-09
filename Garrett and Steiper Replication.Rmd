@@ -22,7 +22,6 @@ Before I could begin this project in my R space, I had to take a few initial ste
 ##First Steps
 
 Now, we are ready to read in my data and start the real work. For now we will start by loading in just the CSV file, because we need to add some additional columns to the dataset before we can do our PGLS. I have included this dataset in my GitHub repo for this project, so you can use a curl command to load it. 
-<br> Just a disclaimer, an artifact of having to transform this data from a PDF format is that there"s some steps we will have to take to clean up the data more one we load it. 
 
 ```{r}
 Olfaction <- read.csv(file="ESM_ALL GOOD ONE.csv", header=TRUE, sep=",")
