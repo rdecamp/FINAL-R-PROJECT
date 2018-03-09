@@ -261,7 +261,7 @@ summary(pgls23)
 ```
 
 As you can see, A good number of them are significant, which is good I think? It means I didn't do something too terribly wrong at least. However, the one thing I'm wondering if they all are supposed to be significant right off the bat without any post hoc corrections. If I am understanding the caption at the bottom of "ESM Table 2" correctly, wouldn't the comparisons marked as being significant after post-hoc testing ONLY be significant after post-hoc testing? I know I'm not supposed to 100% get the same results as the paper, but I'm just curious if this is supposed to be true. I guess we'll revisit this after we do our post-hoc testing. 
-<br> In any case, I'm going to move on to the post-hoc testing, and will do a more in-depth comparison of my results after that.  
+<br> In any case, I'm going to move on to the post-hoc testing, and will do a more in-depth comparison of my results in my "Discussion" section.  
 
 ##Post-Hoc Testing
 
@@ -315,7 +315,7 @@ We can compare these values to this handy table of reported P-values from the pa
 
 ![](p-vals.png)
 We have to really go back and look to see which P-values of my analysis align with which P-values of the table. I will cover this more in-depth in my "Discussion" section, but for now I will say that there are some very obvious discrepancies between my calculations and the original calculations, but many of them were also very similar to the original, which I am happy about. 
-<br> Now, I think I will end the analytical section by trying to recreate some of the figures. 
+<br> Now, I think I will end my reanalysis by trying to recreate some of the figures. 
 
 ##Two nice little graphs 
 
@@ -323,7 +323,7 @@ The last thing I want to do is replicate the cute little graphs that are in this
 
 ![](Graphs.png)
 
-I believe I can do something like this with ggPlot (not sure about the little color key graphic on the side though), so let's see how close we can get. 
+I believe I can do something akin to this with ggPlot (not sure about the little color key graphic on the side though), so let's see how close/pretty we can get. 
 
 <br>First I will try plot A. As you will notice, I will need to add a new column in order to scale the colors correctly, which I will do first. 
 
@@ -337,7 +337,7 @@ Olfaction$logHBL <- log(Olfaction$Head.and.Body.Length..HBL...mm.)
 mid<-mean(Olfaction$logHBL)
 
 
-g <- ggplot(data = Olfaction, aes(x= log.Ethmoid.Area, y= Total.OR.Genes, color = logHBL)) + geom_point() + xlim(2, 9)
+g <- ggplot(data = Olfaction, aes(x= log.Ethmoid.Area, y= Total.OR.Genes, color = logHBL)) + geom_point() + xlim(2, 9) + theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 g
 
 #Now adding better colors cause the default ones are shitty: 
@@ -347,11 +347,44 @@ g1
 
 #Now to change the size according to the proportion of functional OR genes
 
-g2 <- g1 + geom_point(aes(size = prop.functional.OR.Genes))
+g2 <- g1 + geom_point(aes(size = prop.functional.OR.Genes)) + scale_radius(range=c(0.5, 6)) 
 g2
 
+#Finally, I will add a regression line, and move the legend to the bottom because it's bugging the hell out of me where it is now lol
 
+g3 <- g2 + geom_smooth(method='lm', se = FALSE, color = "black") + theme(legend.position="bottom")
+g3
 ```
+
+It's not perfect (or pretty) per se, but it's at least along the same lines as the original! You can very clearly see how the graphs are similar, and how they differ slightly. Now, I will use the same methods to reconstruct graph B. 
+
+```{r}
+
+#Basic plot
+
+g4 <- ggplot(data = Olfaction, aes(x= VNO.Size.Adj, y= prop.intact.V1R.genes, color = logHBL)) + geom_point() + xlim(0, 0.08) + theme(panel.border = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+g4
+
+#Now adding better colors cause the default ones are shitty 
+
+g5 <- g4 + scale_color_gradient2(midpoint=mid, low="red", mid="green", high="blue", space ="Lab" )
+g5
+
+#Now to change the size according to the proportion of functional OR genes
+
+g6 <- g5 + geom_point(aes(size = VNO.Cat.)) + scale_radius(range=c(1, 4)) 
+g6
+
+#Finally, I will add a regression line. The legends aren't bugging me that much this time so I'll just leave them on the side. 
+
+g7 <- g6 + geom_smooth(method='lm', se = FALSE, color = "black") 
+g7
+```
+
+This one doesn't match the original as well... Also, I'm not sure but I think that the original graph had an intercept that was anchored at 0. I will discuss what was similar and different about these graphs at the end of my "Discussion" section. 
+
+##Discussion
+
 
 
 
